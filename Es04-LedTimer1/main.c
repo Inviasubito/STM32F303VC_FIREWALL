@@ -37,7 +37,8 @@ int main()
   //Essendo da 8MHz, fa 8 milioni di operazioni al secondo.
   //Quindi, mezzo secondo significa che il registro assuma 4 milioni come valore
   //Utilizzando un divisore di frequenza, PSC, però posso dividere 8 milioni per mille (999+1) e quindi
-  //mettendo ARR a 4000.
+  //mettendo ARR a 4000, avrei un timer di 0.5 secondi.
+  //Avrei potuto anche lasciare inalterato PSC ed impostare a 4 milioni ARR, per avere lo stesso risultato.
   TIM6->PSC = 999;
   TIM6->ARR = 4000;
   //Azzero il conteggio
