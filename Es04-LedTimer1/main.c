@@ -50,8 +50,13 @@ int main()
   
   while(1)
   {
+    //TIM6->SR Indica che si è verificato (1) o meno (0), un UE (Update Event).
+    //Una volta che il valore è 1, dobbiamo mettere di nuovo 0, altrimenti non ci accorgeremo di un nuovo UE
+    //Si è verificato un UE?
     if((TIM6->SR & 1) == 1)
     {
+      //Si è verificato un UE, quindi imposto il bit a 0
+      //In questo modo, al prossimo ciclo, mi accorgerò del cambiamento
       TIM6->SR = 0;
       
       if(count == 0)
