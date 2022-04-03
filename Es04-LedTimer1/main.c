@@ -55,9 +55,9 @@ int main()
     //Si è verificato un UE?
     if((TIM6->SR & 1) == 1)
     {
-      //Si è verificato un UE, quindi imposto il bit a 0
-      //In questo modo, al prossimo ciclo, mi accorgerò del cambiamento
-      TIM6->SR = 0;
+      //Si è verificato un UE, quindi imposto il bit a 1
+      //In questo modo, al prossimo ciclo, mi accorgerò del cambiamento perchè da0 passerà nuovamente a 1
+      TIM6->SR = 1;
       
       if(count == 0)
       {
