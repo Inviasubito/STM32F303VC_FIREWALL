@@ -36,30 +36,26 @@ int main()
   //Imposto il tempo.
   //Essendo da 8MHz, fa 8 milioni di operazioni al secondo.
   //Quindi, mezzo secondo significa che il registro assuma 4 milioni come valore
-  //Utilizzando un divisore di frequenza, PSC, però posso dividere 8 milioni per mille (999+1) e quindi
-  //mettendo ARR a 4000, avrei un timer di 0.5 secondi.
-  //Avrei potuto anche lasciare inalterato PSC ed impostare a 4 milioni ARR, per avere lo stesso risultato.
+  //8Mhz/1000, significa che in un secondo, il contatore arriva a 8000
   TIM6->PSC = 999;
+  //Quando arrivo a 4000 (quindi in 0,5 secondi), il flag diverrà 1
   TIM6->ARR = 4000;
   //Azzero il conteggio
   TIM6->CNT = 0;
+  //Abilito ARPE, in questo modo posso utilizzare il flag
+  TIM6->CR1 |= TIM_CR1_ARPE;
   //Abilito il timer
-  TIM6->CR1 = TIM_CR1_CEN;
+  TIM6->CR1 |= TIM_CR1_CEN;
   
   int ledCounter = 0;
   
   while(1)
   {
-    //TIM6->SR Indica che si è verificato (1) o meno (0), un UE (Update Event).
-    //Una volta che il valore è 1, dobbiamo mettere di nuovo 0, altrimenti non ci accorgeremo di un nuovo UE
-    //Si è verificato un UE?
-    if((TIM6->SR & 1) == 1)
+    if((TIM6->SR & TIM_SR_UIF) == TIM_SR_UIF)
     {
-      //Si è verificato un UE, quindi imposto il bit a 1
-      //In questo modo, al prossimo ciclo, mi accorgerò del cambiamento perchè da 1 passerà nuovamente a 0
       TIM6->SR = 0;
       
-      if(count == 0)
+      if(count == 0)    //Invece dell'if, avremmo potuto utilizzare un meccanismo delle interruzioni.
       {
         count++;
         GPIOE->ODR = (8 << ++ledCounter);
